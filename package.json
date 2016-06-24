@@ -1,0 +1,17 @@
+{
+  "name": "@nodulus/config",
+  "version": "1.0.8",
+  "description": "",
+  "main": "index.js",
+  "typescript": {
+    "definition": "index.d.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^1.8.10"
+  }
+}
