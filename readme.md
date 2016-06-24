@@ -1,7 +1,7 @@
 # @nodulus/config
 
  configuration component for nodulus.
- 
+  
  ### install
  `npm install @nodulus/config`
  
