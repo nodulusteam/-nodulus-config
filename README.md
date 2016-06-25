@@ -36,7 +36,7 @@
 }
  
  ```
-<<<<<<< HEAD:readme.md
+ 
 
 
  ### set config file location
@@ -45,5 +45,4 @@
  SET CONFIG_PATH = '--config--path--'
  
 ```
-=======
->>>>>>> d268673ca3893d8c71df99231c8f47e68c3e75b9:README.md
+ 
