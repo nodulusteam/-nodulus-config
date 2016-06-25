@@ -9,17 +9,23 @@
  */
 /// <reference path="../typings/main.d.ts" />
 import {consts} from "./consts";
-  
-    export class config {
-        public appSettings: any;
-        public modulesSettings: any;
 
-        constructor() {
-            var util = require('util');
-            var fs = require('fs');
-            var path = require('path');
+export class config {
+    public appSettings: any;
+    public modulesSettings: any;
 
-            this.appSettings = JSON.parse(fs.readFileSync(path.join(global.serverAppRoot ,  'config', consts.CONFIG_NAME), 'utf8').replace(/^\uFEFF/, ''));
-            this.modulesSettings = JSON.parse(fs.readFileSync(path.join(global.serverAppRoot ,  consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));           
+    constructor() {
+        var util = require('util');
+        var fs = require('fs');
+        var path = require('path');
+
+        var configPath = path.join(path.resolve('config'));
+        if (process.env.CONFIG_PATH) {
+            configPath = path.resolve(process.env.CONFIG_PATH);
         }
+
+        
+        this.appSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.CONFIG_NAME), 'utf8').replace(/^\uFEFF/, ''));
+        this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
     }
+}
