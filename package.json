@@ -7,7 +7,7 @@
     "definition": "index.d.ts"
   },
   "scripts": {
-    "test": "mocha tests --recursive --watch"
+    "test": "mocha tests --recursive"
   },
   "author": "",
   "license": "ISC",
