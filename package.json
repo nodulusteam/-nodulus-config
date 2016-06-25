@@ -1,6 +1,6 @@
 {
   "name": "@nodulus/config",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "main": "index.js",
   "typescript": {
@@ -9,6 +9,10 @@
   "scripts": {
     "test": "mocha tests --recursive"
   },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/nodulusteam/-nodulus-config"
+},
   "author": "",
   "license": "ISC",
   "devDependencies": {
