@@ -6,7 +6,7 @@
  configuration component for nodulus.
   
  ![Alt text](https://travis-ci.org/nodulusteam/-nodulus-config.svg?branch=master "build")
-
+ ![Alt text](https://david-dm.org/nodulusteam/-nodulus-config.svg "dependencies")
  
 
 
