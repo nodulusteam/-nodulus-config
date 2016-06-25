@@ -1,7 +1,15 @@
 # @nodulus/config
 
+
+
+
  configuration component for nodulus.
   
+[logo]: https://travis-ci.org/nodulusteam/-nodulus-config.svg?branch=master  
+
+ 
+
+
  ### install
  `npm install @nodulus/config`
  
