@@ -36,13 +36,8 @@
 }
  
  ```
- 
-
-
  ### set config file location
-
 ```
  SET CONFIG_PATH = '--config--path--'
  
 ```
- 
