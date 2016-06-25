@@ -5,7 +5,7 @@
 
  configuration component for nodulus.
   
-[logo]: https://travis-ci.org/nodulusteam/-nodulus-config.svg?branch=master  
+ ![Alt text](https://travis-ci.org/nodulusteam/-nodulus-config.svg?branch=master "build")
 
  
 
