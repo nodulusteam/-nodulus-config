@@ -5,6 +5,10 @@
 
  configuration component for nodulus.
   
+
+   
+[![NPM](https://nodei.co/npm/@nodulus/config.png)](https://npmjs.org/package/@nodulus/config)
+
  ![Alt text](https://travis-ci.org/nodulusteam/-nodulus-config.svg?branch=master "build")
  ![Alt text](https://david-dm.org/nodulusteam/-nodulus-config.svg "dependencies")
  
