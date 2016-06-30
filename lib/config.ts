@@ -24,8 +24,13 @@ export class config {
             configPath = path.resolve(process.env.CONFIG_PATH);
         }
 
-        
+
         this.appSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.CONFIG_NAME), 'utf8').replace(/^\uFEFF/, ''));
-        this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
+        try {
+            if (fs.statSync(path.join(configPath, consts.MODULES_NAME)) !== null)
+                this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
+        } catch (error) {
+            console.log("no modules configuration");
+        }
     }
 }
