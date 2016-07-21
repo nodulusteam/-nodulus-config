@@ -10,27 +10,36 @@
 /// <reference path="../typings/main.d.ts" />
 import {consts} from "./consts";
 
+ 
+
 export class config {
     public appSettings: any;
     public modulesSettings: any;
 
     constructor() {
         var util = require('util');
+        var exists = require('file-exists-sync').default;
         var fs = require('fs');
         var path = require('path');
-
-        var configPath = path.join(path.resolve('config'));
+        var mkdirp = require('mkdirp');
+        var configPath = path.join(process.cwd(), 'config');
         if (process.env.CONFIG_PATH) {
             configPath = path.resolve(process.env.CONFIG_PATH);
         }
 
+        mkdirp.sync(configPath);
 
-        this.appSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.CONFIG_NAME), 'utf8').replace(/^\uFEFF/, ''));
-        try {
-            if (fs.statSync(path.join(configPath, consts.MODULES_NAME)) !== null)
-                this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
-        } catch (error) {
-            console.log("no modules configuration");
-        }
+        var configuration_file_path = path.join(configPath, consts.CONFIG_NAME);
+        if (exists(configuration_file_path))
+            this.appSettings = JSON.parse(fs.readFileSync(configuration_file_path, 'utf8').replace(/^\uFEFF/, ''));
+
+        else
+            this.appSettings = require("../templates/" + consts.CONFIG_NAME);
+
+        var modules_file_name = path.join(configPath, consts.MODULES_NAME);
+        if (exists(modules_file_name))
+            this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
+        else
+            this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
     }
 }
