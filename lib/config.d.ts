@@ -3,4 +3,5 @@ export declare class config {
     appSettings: any;
     modulesSettings: any;
     constructor();
+    persistConfiguration(): void;
 }

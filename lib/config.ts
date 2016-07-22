@@ -9,8 +9,18 @@
  */
 /// <reference path="../typings/main.d.ts" />
 import {consts} from "./consts";
+var fs = require("fs-extra");
+var path = require('path');
 
- 
+
+var configPath = path.join(process.cwd(), 'config');
+if (process.env.CONFIG_PATH) {
+    configPath = path.resolve(process.env.CONFIG_PATH);
+}
+
+var configuration_file_path = path.join(configPath, consts.CONFIG_NAME);
+
+
 
 export class config {
     public appSettings: any;
@@ -19,22 +29,24 @@ export class config {
     constructor() {
         var util = require('util');
         var exists = require('file-exists-sync').default;
-        var fs = require('fs');
-        var path = require('path');
+
+
         var mkdirp = require('mkdirp');
-        var configPath = path.join(process.cwd(), 'config');
-        if (process.env.CONFIG_PATH) {
-            configPath = path.resolve(process.env.CONFIG_PATH);
-        }
+
 
         mkdirp.sync(configPath);
 
-        var configuration_file_path = path.join(configPath, consts.CONFIG_NAME);
+
         if (exists(configuration_file_path))
             this.appSettings = JSON.parse(fs.readFileSync(configuration_file_path, 'utf8').replace(/^\uFEFF/, ''));
 
         else
             this.appSettings = require("../templates/" + consts.CONFIG_NAME);
+
+
+        if (this.appSettings["database"].diskdb)
+            fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
+
 
         var modules_file_name = path.join(configPath, consts.MODULES_NAME);
         if (exists(modules_file_name))
@@ -42,4 +54,16 @@ export class config {
         else
             this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
     }
+
+
+
+    public persistConfiguration() {
+
+        if (this.appSettings["database"].diskdb)
+            fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
+
+
+        fs.writeFileSync(configuration_file_path, JSON.stringify(this.appSettings), 'utf8');
+    }
+
 }

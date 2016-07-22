@@ -6,11 +6,11 @@ var runSequence = require('run-sequence');
 var del = require('del');
 var fs = require('fs'),
     publish = require('gulp-publish'),
-    tsc = require('gulp-typescript'),
+    typescript = require('gulp-typescript'),
     tslint = require('gulp-tslint'),
 
-    Config = require('./gulpfile.config'),
-    tsProject = tsc.createProject('./tsconfig.json');
+    Config = require('./gulpfile.config');
+   // tsProject = tsc.createProject('./tsconfig.json');
 
  
 var config = new Config();
@@ -52,18 +52,10 @@ gulp.task('ts-lint', function () {
 /**
  * Compile TypeScript and include references to library and app .d.ts files.
  */
-gulp.task('compile-ts', function () {
-    var sourceTsFiles = [config.allTypeScript,                //path to typescript files
-        config.libraryTypeScriptDefinitions]; //reference to library .d.ts files
-
-
-    var tsResult = gulp.src(sourceTsFiles)
-        .pipe(tsc(tsProject));
-
-    tsResult.dts.pipe(gulp.dest(config.tsOutputPath));
-    return tsResult.js
-        // .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.tsOutputPath));
+gulp.task('compile', function () {
+    var tsProject = typescript.createProject('tsconfig.json');
+    var tsResult = tsProject.src().pipe(typescript(tsResult));
+    return tsResult.js.pipe(gulp.dest('./'));
 });
 
 /**
@@ -83,8 +75,8 @@ gulp.task('clean-ts', function (cb) {
 
 
 
-gulp.task('build', function () {
-    runSequence(['ts-lint', 'compile-ts'], 'npm');
+gulp.task('publish', function () {
+    runSequence('ts-lint', 'compile','bump', 'npm');
 });
 
 
@@ -94,4 +86,4 @@ gulp.task('build', function () {
 //         .pipe(install({ production: true, noOptional: true }));
 // });
 
-gulp.task('default', ['bump', 'build']);
+gulp.task('default', ['compile']);
