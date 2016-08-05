@@ -19,14 +19,36 @@ if (process.env.CONFIG_PATH) {
 }
 
 var configuration_file_path = path.join(configPath, consts.CONFIG_NAME);
+var modules_file_name = path.join(configPath, consts.MODULES_NAME);
 
 
+ class Singleton {
+        private _initialized: boolean;
 
-export class config {
+        private _setSingleton(): void {
+            if (this._initialized) throw Error('Singleton is already initialized.');
+            this._initialized = true;
+        }
+      
+        //get setSingleton() { return this._setSingleton; }
+    }
+
+ class config extends Singleton {
     public appSettings: any;
     public modulesSettings: any;
 
+    private static _instance: config = new config();
+    public static getInstance(): config {
+        return config._instance;
+    }
     constructor() {
+        super();
+        if (config._instance) {
+            return config._instance;
+        }
+
+
+
         var util = require('util');
         var exists = require('file-exists-sync').default;
 
@@ -48,22 +70,43 @@ export class config {
             fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
 
 
-        var modules_file_name = path.join(configPath, consts.MODULES_NAME);
+
         if (exists(modules_file_name))
-            this.modulesSettings = JSON.parse(fs.readFileSync(path.join(configPath, consts.MODULES_NAME), 'utf8').replace(/^\uFEFF/, ''));
+            this.modulesSettings = require(path.join(configPath, consts.MODULES_NAME));
         else
             this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
+
+        if (!this.modulesSettings) {
+            require("../templates/" + consts.MODULES_NAME);
+        }
+
+        return config._instance;
+
     }
 
+
+
+
+
+    public mergeConfiguration(configuration_to_merge: any, key: string) {
+        this.appSettings[key] = configuration_to_merge;
+        this.persistConfiguration();
+    }
 
 
     public persistConfiguration() {
-
-        if (this.appSettings["database"].diskdb)
-            fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
-
-
         fs.writeFileSync(configuration_file_path, JSON.stringify(this.appSettings), 'utf8');
     }
 
+
+    public persistModules() {
+        fs.writeFileSync(modules_file_name, JSON.stringify(this.modulesSettings), 'utf8');
+    }
+
 }
+
+
+ 
+exports.config = config.getInstance();
+
+
