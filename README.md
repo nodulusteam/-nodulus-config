@@ -53,3 +53,15 @@
  SET CONFIG_PATH = '--config--path--'
  
 ```
+
+
+
+
+ ### config object api
+
+`persistConfiguration()`
+
+`persistModules()`
+
+`mergeConfiguration(configuration_to_merge: any, key: string)`
+ 
