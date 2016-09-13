@@ -71,19 +71,19 @@ module configuration {
                 this.appSettings = require("../templates/" + consts.CONFIG_NAME);
 
 
-            if (this.appSettings["database"].diskdb)
+            if (this.appSettings["database"] && this.appSettings["database"].diskdb)
                 fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
 
 
 
             if (exists(modules_file_name))
                 this.modulesSettings = require(path.join(configPath, consts.MODULES_NAME));
-            else
-                this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
+            // else
+            //     this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
 
-            if (!this.modulesSettings) {
-                require("../templates/" + consts.MODULES_NAME);
-            }
+            // if (!this.modulesSettings) {
+            //     require("../templates/" + consts.MODULES_NAME);
+            // }
 
             return config._instance;
 

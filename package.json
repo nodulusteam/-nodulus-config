@@ -1,6 +1,6 @@
 {
   "name": "@nodulus/config",
-  "version": "1.0.53",
+  "version": "1.0.63",
   "description": "",
   "main": "index.js",
   "typescript": {

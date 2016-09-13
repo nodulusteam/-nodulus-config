@@ -4,6 +4,7 @@
   "port": "4000",
   "appRoot": "/",
   "enableSockets": true,
-  "database": { "diskdb": { "host": "data" } }
+  "database": { "diskdb": { "host": "data" } },
+  "defaultPage": "./client/default.html"
  
 }
