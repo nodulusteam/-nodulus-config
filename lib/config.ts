@@ -8,9 +8,11 @@
  @nodulus open source | ©Roi ben haim  ®2016    
  */
 /// <reference path="../typings/main.d.ts" />
-import {consts} from "./consts";
-var fs = require("fs-extra");
-var path = require('path');
+import { consts } from "./consts";
+const fs = require("fs-extra");
+const path = require('path');
+const merge = require('merge');
+const chokidar = require('chokidar');
 
 
 
@@ -20,6 +22,8 @@ var configPath = path.join(process.cwd(), 'config');
 if (process.env.CONFIG_PATH) {
     configPath = path.resolve(process.env.CONFIG_PATH);
 }
+
+
 
 var configuration_file_path = path.join(configPath, consts.CONFIG_NAME);
 var modules_file_name = path.join(configPath, consts.MODULES_NAME);
@@ -52,46 +56,46 @@ module configuration {
                 return config._instance;
             }
 
-
-
             var util = require('util');
             var exists = require('file-exists-sync').default;
-
-
             var mkdirp = require('mkdirp');
-
-
             mkdirp.sync(configPath);
 
+            var templateConfig = require("../templates/" + consts.CONFIG_NAME);
 
-            if (exists(configuration_file_path))
-                this.appSettings = JSON.parse(fs.readFileSync(configuration_file_path, 'utf8').replace(/^\uFEFF/, ''));
+            if (exists(configuration_file_path)) {
 
-            else
+                // One-liner for current directory, ignores .dotfiles 
+                chokidar.watch(configuration_file_path, {
+                    usePolling: false,
+                    ignored: /[\/\\]\./
+                }).on('all', (event: any, path: string) => {
+                    console.log(event, path);
+                    this.appSettings = require(configuration_file_path);
+                    this.appSettings = merge(templateConfig, this.appSettings);
+
+                });
+                this.appSettings = require(configuration_file_path);
+                this.appSettings = merge(templateConfig, this.appSettings);
+            }
+            else {
                 this.appSettings = require("../templates/" + consts.CONFIG_NAME);
+                this.persistConfiguration();
+            }
 
 
-            if (this.appSettings["database"] && this.appSettings["database"].diskdb)
-                fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
-
-
+            try {
+                if (this.appSettings["database"] && this.appSettings["database"].diskdb)
+                    fs.ensureDirSync(path.resolve(this.appSettings["database"].diskdb.host));
+            } catch (e) {
+                console.log('bad data directory', this.appSettings["database"].diskdb);
+            }
 
             if (exists(modules_file_name))
                 this.modulesSettings = require(path.join(configPath, consts.MODULES_NAME));
-            // else
-            //     this.modulesSettings = require("../templates/" + consts.MODULES_NAME);
-
-            // if (!this.modulesSettings) {
-            //     require("../templates/" + consts.MODULES_NAME);
-            // }
 
             return config._instance;
-
         }
-
-
-
-
 
         public mergeConfiguration(configuration_to_merge: any, key: string) {
             this.appSettings[key] = configuration_to_merge;
@@ -100,18 +104,15 @@ module configuration {
 
 
         public persistConfiguration() {
-            fs.writeFileSync(configuration_file_path, JSON.stringify(this.appSettings), 'utf8');
+            fs.writeFileSync(configuration_file_path, 'module.exports=' + JSON.stringify(this.appSettings, null, "\t"), 'utf8');
         }
 
 
         public persistModules() {
-            fs.writeFileSync(modules_file_name, JSON.stringify(this.modulesSettings), 'utf8');
+            fs.writeFileSync(modules_file_name, 'module.exports=' + JSON.stringify(this.modulesSettings, null, "\t"), 'utf8');
         }
 
     }
-    //exports.config = config.getInstance();
+
 }
 module.exports.config = configuration.config.getInstance();
-//exports.config = config.getInstance();
-
-

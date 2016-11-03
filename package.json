@@ -1,6 +1,6 @@
 {
   "name": "@nodulus/config",
-  "version": "1.0.64",
+  "version": "1.0.70",
   "description": "",
   "main": "index.js",
   "typescript": {
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/nodulusteam/-nodulus-config"
   },
-  "author": "",
+  "author": "nodulus team",
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
@@ -31,8 +31,10 @@
     "typescript": "^1.8.10"
   },
   "dependencies": {
+    "chokidar": "^1.6.1",
     "file-exists-sync": "^1.0.1",
     "fs-extra": "^0.30.0",
+    "merge": "^1.2.0",
     "mkdirp": "^0.5.1"
   }
 }
